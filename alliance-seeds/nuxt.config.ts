@@ -9,6 +9,7 @@ export default defineNuxtConfig({
     '@/assets/css/templatemo-style.css'
   ],
   plugins: [
-    { src: '~/plugins/bootstrap.ts', mode: 'client' }
+    { src: '~/plugins/bootstrap.ts', mode: 'client' },
+    // { src: '~/plugins/load-scripts.ts', mode: 'client' }
   ],
-})
+});
