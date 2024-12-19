@@ -1,163 +1,127 @@
 <template>
-    <div>
-      <nav class="navbar navbar-expand-xl">
-        <div class="container h-100">
-          <a class="navbar-brand" href="index.html">
-            <h1 class="tm-site-title mb-0">Product Admin</h1>
-          </a>
-          <button
-            class="navbar-toggler ml-auto mr-0"
-            type="button"
-            data-toggle="collapse"
-            data-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-          >
-            <i class="fas fa-bars tm-nav-icon"></i>
-          </button>
-  
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mx-auto h-100">
-              <li class="nav-item">
-                <a class="nav-link">
-                  <i class="fas fa-tachometer-alt"></i> Dashboard
-                  <span class="sr-only">(current)</span>
-                </a>
-              </li>
-              <li class="nav-item dropdown">
-                <a
-                  class="nav-link dropdown-toggle"
-                  href="#"
-                  id="navbarDropdown"
-                  role="button"
-                  data-toggle="dropdown"
-                  aria-haspopup="true"
-                  aria-expanded="false"
-                >
-                  <i class="far fa-file-alt"></i>
-                  <span> Reports <i class="fas fa-angle-down"></i> </span>
-                </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <a class="dropdown-item" href="#">Daily Report</a>
-                  <a class="dropdown-item" href="#">Weekly Report</a>
-                  <a class="dropdown-item" href="#">Yearly Report</a>
-                </div>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="products.html">
-                  <i class="fas fa-shopping-cart"></i> Products
-                </a>
-              </li>
-  
-              <li class="nav-item">
-                <a class="nav-link" href="accounts.html">
-                  <i class="far fa-user"></i> Accounts
-                </a>
-              </li>
-              <li class="nav-item dropdown">
-                <a
-                  class="nav-link dropdown-toggle"
-                  href="#"
-                  id="navbarDropdown"
-                  role="button"
-                  data-toggle="dropdown"
-                  aria-haspopup="true"
-                  aria-expanded="false"
-                >
-                  <i class="fas fa-cog"></i>
-                  <span> Settings <i class="fas fa-angle-down"></i> </span>
-                </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <a class="dropdown-item" href="#">Profile</a>
-                  <a class="dropdown-item" href="#">Billing</a>
-                  <a class="dropdown-item" href="#">Customize</a>
-                </div>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </nav>
-  
-      <div class="container tm-mt-big tm-mb-big">
-        <div class="row">
-          <div class="col-12 mx-auto tm-login-col">
-            <div class="tm-bg-primary-dark tm-block tm-block-h-auto">
-              <div class="row">
-                <div class="col-12 text-center">
-                  <h2 class="tm-block-title mb-4">
-                    Welcome to Dashboard, Login
-                  </h2>
-                </div>
+  <div>
+    <!-- <navbar></navbar> -->
+
+    <div class="container tm-mt-big tm-mb-big">
+      <div class="row">
+        <div class="col-12 mx-auto tm-login-col">
+          <div class="tm-bg-primary-dark tm-block tm-block-h-auto">
+            <div class="row">
+              <div class="col-12 text-center">
+                <h2 class="tm-block-title mb-4">Admin Portal Login</h2>
               </div>
-              <div class="row mt-2">
-                <div class="col-12">
-                  <form action="index.html" method="post" class="tm-login-form">
-                    <div class="form-group">
-                      <label for="username">Username</label>
-                      <input
-                        name="username"
-                        type="text"
-                        class="form-control validate"
-                        id="username"
-                        value=""
-                        required
-                      />
-                    </div>
-                    <div class="form-group mt-3">
-                      <label for="password">Password</label>
-                      <input
-                        name="password"
-                        type="password"
-                        class="form-control validate"
-                        id="password"
-                        value=""
-                        required
-                      />
-                    </div>
-                    <div class="form-group mt-4">
-                      <button
-                        type="submit"
-                        class="btn btn-primary btn-block text-uppercase"
-                      >
-                        Login
-                      </button>
-                    </div>
-                  </form>
-                </div>
+            </div>
+            <div class="row mt-2">
+              <div class="col-12">
+                <form @submit.prevent="authenticate" class="tm-login-form">
+                  <div class="form-group">
+                    <label for="username">Username</label>
+                    <input
+                      name="username"
+                      type="text"
+                      class="form-control validate"
+                      id="username"
+                      v-model="username"
+                      required
+                    />
+                  </div>
+                  <div class="form-group mt-3">
+                    <label for="password">Password</label>
+                    <input
+                      name="password"
+                      type="text"
+                      class="form-control validate"
+                      id="password"
+                      v-model="password"
+                      required
+                    />
+                  </div>
+                  <div class="form-group mt-4">
+                    <button
+                      type="submit"
+                      class="btn btn-primary btn-block text-uppercase"
+
+                    >
+                      Login
+                    </button>
+                  </div>
+                </form>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <footer class="tm-footer row tm-mt-small">
-        <div class="col-12 font-weight-light">
-          <p class="text-center text-white mb-0 px-4 small">
-            Copyright &copy; <b>2018</b> All rights reserved. Design:
-            <a
-              rel="nofollow noopener"
-              href="https://templatemo.com"
-              class="tm-footer-link"
-              >Template Mo</a
-            >
-          </p>
-        </div>
-      </footer>
     </div>
-  </template>
-  
-  <script>
-  export default {
-    name: "IndexPage",
-    head() {
+    <!-- <footer class="tm-footer row tm-mt-small">
+      <div class="col-12 font-weight-light">
+        <p class="text-center text-white mb-0 px-4 small">
+          Copyright &copy; <b>2020</b> All rights reserved. Design:
+          <a
+            rel="nofollow noopener"
+            href="https://templatemo.com"
+            class="tm-footer-link"
+            >Template Mo</a
+          >
+        </p>
+      </div>
+    </footer> -->
+  </div>
+</template>
+
+<script>
+import navbar from '~/components/admin/navbar.vue';
+import CryptoJS from 'crypto-js';
+import user from "@/services/server/user";
+import { onMounted } from 'vue';
+import useSessionStore from "~/stores/session";
+
+export default {
+  name: "IndexPage",
+  head() {
     return {
-      title: 'Admin'
-    }
-  }
-  };
-  </script>
-  
-  <style scoped>
-  /* @import "@/assets/css/fontawesome.min.css";
-  @import "@/assets/css/templatemo-style.css"; */
-  </style>
+      title: "Admin",
+    };
+  },
+  components: {
+    navbar,
+  },
+  data() {
+    return {
+      username: "",
+      password: "",
+      session: null, // Placeholder for the store
+    };
+  },
+  mounted() {
+    this.session = useSessionStore();
+  },
+  methods: {
+    async authenticate() {
+      let passwordHash = CryptoJS.SHA256(this.password).toString(CryptoJS.enc.Hex);
+
+      let auth = {
+        name: this.username,
+        passwordHash: passwordHash,
+      };
+
+      let authResponse = await user.authUser(auth);
+      console.log("response: ", authResponse);
+
+      let accessToken = authResponse.data;
+      this.session.setApiToken(accessToken);
+
+      let temp = this.session.getApiToken;
+      console.log("token: " + temp);
+    },
+  },
+
+};
+</script>
+
+
+<style scoped>
+#footer {
+  position: fixed;
+  bottom: 0;
+}
+</style>

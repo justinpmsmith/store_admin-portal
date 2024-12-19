@@ -10,9 +10,14 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@nuxt/icon": "1.10.2",
+    "@pinia/nuxt": "^0.9.0",
+    "axios": "^1.7.9",
     "bootstrap": "^5.3.3",
+    "crypto-js": "^4.2.0",
     "jquery": "^3.7.1",
     "nuxt": "^3.14.1592",
+    "pinia": "^2.3.0",
     "vue": "latest",
     "vue-router": "latest",
     "vuetify-nuxt-module": "0.18.3"
