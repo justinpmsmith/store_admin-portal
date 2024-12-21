@@ -1,6 +1,6 @@
 <template>
   <div>
-    <!-- <navbar></navbar> -->
+    <navbar></navbar>
 
     <div class="container tm-mt-big tm-mb-big">
       <div class="row">
@@ -40,7 +40,6 @@
                     <button
                       type="submit"
                       class="btn btn-primary btn-block text-uppercase"
-
                     >
                       Login
                     </button>
@@ -69,19 +68,25 @@
 </template>
 
 <script>
-import navbar from '~/components/admin/navbar.vue';
-import CryptoJS from 'crypto-js';
+import navbar from "~/components/admin/navbar.vue";
+import CryptoJS from "crypto-js";
 import user from "@/services/server/user";
-import { onMounted } from 'vue';
 import useSessionStore from "~/stores/session";
+// import { useHead } from '@vueuse/head';
+import { toast } from "vue3-toastify";
+import "vue3-toastify/dist/index.css";
+
+// useHead({
+//   title: "Admin Login",
+//   meta: [
+//     { charset: "UTF-8" },
+//     { name: "viewport", content: "width=device-width, initial-scale=1.0" },
+//     { "http-equiv": "X-UA-Compatible", content: "ie=edge" },
+//   ],
+// });
 
 export default {
   name: "IndexPage",
-  head() {
-    return {
-      title: "Admin",
-    };
-  },
   components: {
     navbar,
   },
@@ -89,7 +94,7 @@ export default {
     return {
       username: "",
       password: "",
-      session: null, // Placeholder for the store
+      session: null,
     };
   },
   mounted() {
@@ -97,27 +102,30 @@ export default {
   },
   methods: {
     async authenticate() {
-      let passwordHash = CryptoJS.SHA256(this.password).toString(CryptoJS.enc.Hex);
+      const passwordHash = CryptoJS.SHA256(this.password).toString(CryptoJS.enc.Hex);
+      const auth = { name: this.username, passwordHash };
 
-      let auth = {
-        name: this.username,
-        passwordHash: passwordHash,
-      };
-
-      let authResponse = await user.authUser(auth);
+      const authResponse = await user.authUser(auth);
       console.log("response: ", authResponse);
 
-      let accessToken = authResponse.data;
-      this.session.setApiToken(accessToken);
+      if (authResponse == null) {
+        toast.error("Network Error", { autoClose: 3000, hideProgressBar: true });
+        return;
+      }
 
-      let temp = this.session.getApiToken;
-      console.log("token: " + temp);
+      if (!authResponse.meta.success) {
+        toast.error(authResponse.meta.message, { autoClose: 3000, hideProgressBar: true });
+        return;
+      }
+
+      const accessToken = authResponse.data;
+      this.session.setApiToken(accessToken);
+      this.$router.push("/admin/products");
     },
   },
-
 };
-</script>
 
+</script>
 
 <style scoped>
 #footer {

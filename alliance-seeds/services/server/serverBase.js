@@ -6,15 +6,8 @@ class ServerBase {
     return config.apiUrl;
   }
 
-  static async getRequest(
-    endpoint,
-    retries = 3,
-    params = null, // {param1: "value", param2: 222}
-    timeout = 10000
-
-  ) {
+  static async getRequest(endpoint, params = null, admin = false) {
     try {
-      retries += 1;
       let url = (await this.getServerPath()) + endpoint;
 
       if (params) {
@@ -28,15 +21,12 @@ class ServerBase {
         maxBodyLength: Infinity,
         url: url,
         headers: {},
-        timeout: timeout,
       };
 
-      for (let attempt = 1; attempt <= retries; attempt++) {
-        const response = await axios.request(config);
+      const response = await axios.request(config);
 
-        if (response.status == 200) {
-          return response.data;
-        }
+      if (response.status == 200) {
+        return response.data;
       }
     } catch (error) {
       var errMes = `${endpoint}: ${error.message}`;
@@ -46,12 +36,7 @@ class ServerBase {
     return null;
   }
 
-  static async postRequest(
-    endpoint,
-    data,
-    retries = 3,
-    timeout = 10000
-  ) {
+  static async postRequest(endpoint, data, admin = false) {
     try {
       var url = (await this.getServerPath()) + endpoint;
       console.log("post url: " + url);
@@ -63,57 +48,52 @@ class ServerBase {
         headers: {
           "Content-Type": "application/json",
         },
-        timeout: timeout,
         data: JSON.stringify(data),
       };
 
       console.log("post config:");
       console.log(config);
 
-      retries += 1; // lop starts at 1 so increment retries
-      for (let attempt = 1; attempt <= retries; attempt++) {
-        const response = await axios.request(config);
+      const response = await axios.request(config);
 
-        if (response.status === 200) {
-          return response.data; // Success
-        }
-
-        console.warn(
-          `Request failed on attempt ${attempt} (status: ${response.status}). Retrying...`
-        );
+      if (response.status === 200) {
+        return response.data; // Success
       }
     } catch (error) {
       const errMes = `${endpoint}: ${error.message}`;
       console.log(errMes);
     }
 
-    console.error(`Failed to complete request after ${retries} retries.`);
     return null;
   }
 
-  static async deleteRequest(
-    endpoint,
-    timeout = 5000
-  ) {
+  static async deleteRequest(endpoint, params = null, admin = false) {
     try {
-      const url = (await this.getServerPath()) + endpoint;
-
-      console.log("delete url: " + url);
+      let url = (await this.getServerPath()) + endpoint;
+  
+      if (params) {
+        const queryString = new URLSearchParams(params).toString();
+        url += `?${queryString}`;
+      }
+      console.log("endpoint: " + url);
+  
       let config = {
         method: "delete",
         maxBodyLength: Infinity,
         url: url,
-        timeout: timeout,
         headers: {},
       };
+  
       const response = await axios.request(config);
-
+  
       if (response.status == 200) {
         return response.data;
       }
     } catch (error) {
-      console.log(error);
+      var errMes = `${endpoint}: ${error.message}`;
+      console.log(errMes);
     }
+  
     return null;
   }
 }

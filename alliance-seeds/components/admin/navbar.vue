@@ -19,7 +19,7 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mx-auto h-100">
           <li class="nav-item">
-            <a class="nav-link">
+            <a class="nav-link" style="color: white;">
               <Icon name="ic:outline-question-answer" mode="svg" style="color: white" size="2rem"/>
                Dashboard
               <span class="sr-only">(current)</span>

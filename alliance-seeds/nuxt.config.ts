@@ -5,16 +5,15 @@ export default defineNuxtConfig({
   modules: [
     'vuetify-nuxt-module',
     '@nuxt/icon',
-    '@pinia/nuxt'
-
-    ],
+    '@pinia/nuxt',
+  ],
   css: [
-    'bootstrap/dist/css/bootstrap.css',
+    // 'bootstrap/dist/css/bootstrap.css',
+    '@/assets/css/bootstrap.min.css',
     '@/assets/css/fontawesome.min.css',
     '@/assets/css/templatemo-style.css'
   ],
   plugins: [
     { src: '~/plugins/bootstrap.ts', mode: 'client' },
-    // { src: '~/plugins/load-scripts.ts', mode: 'client' }
   ],
 });

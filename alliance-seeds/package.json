@@ -12,6 +12,7 @@
   "dependencies": {
     "@nuxt/icon": "1.10.2",
     "@pinia/nuxt": "^0.9.0",
+    "@vueuse/head": "^2.0.0",
     "axios": "^1.7.9",
     "bootstrap": "^5.3.3",
     "crypto-js": "^4.2.0",
@@ -20,6 +21,7 @@
     "pinia": "^2.3.0",
     "vue": "latest",
     "vue-router": "latest",
+    "vue3-toastify": "^0.2.8",
     "vuetify-nuxt-module": "0.18.3"
   },
   "packageManager": "yarn@1.22.22+sha1.ac34549e6aa8e7ead463a7407e1c7390f61a6610"
