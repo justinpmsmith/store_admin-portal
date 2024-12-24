@@ -13,11 +13,17 @@ class Product extends ServerBase {
     return response;
   }
 
-  static async getProductsByCategory(){}
+  static async getProductsByCategory(category){
+    const endpoint = '/client/getProductsByCategory';
+    const params = { category: category };
+    const response = await this.getRequest(endpoint, params); 
+    return response;
+  }
+
   static async deleteProductByProdCode(prodCode){
     const endpoint = '/client/deleteProductByProdCode';
     const params = { prodCode: prodCode };
-    const response = this.deleteRequest(endpoint, params); 
+    const response = await this.deleteRequest(endpoint, params); 
     return response;
   }
 
