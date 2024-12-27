@@ -60,6 +60,8 @@
                     <br>
                     <br> -->
                     <v-btn onclick="document.getElementById('fileInput').click();"> UPLOAD CATEGORY IMAGE  </v-btn>
+                    <v-btn v-if="categoryImage" class="ml-2" @click="categoryImage=null"> Remove image  </v-btn>
+
                   </div>
                 </div>
                 <div class="col-12">
@@ -129,7 +131,7 @@ export default {
 
       if(response != null && response.meta.success){
         toast.success("Category Added", { autoClose: 3000, hideProgressBar: true });
-        this.$router.back();
+        setTimeout(()=>{this.$router.replace("/admin/products");}, 3000);
         return;
       }
       toast.error("There was an error adding category", { autoClose: 3000, hideProgressBar: true });

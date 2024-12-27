@@ -25,6 +25,22 @@ class Product extends ServerBase {
     // response = ["cat1", "cat2"]
   }
 
+  static async getCategoryByName(category) {
+    const endpoint = "/client/getCategoryByName";
+    const params = { name: category };
+
+    const response = await this.getRequest(endpoint, params);
+    return response;
+
+    // response = {
+    //     "id": 1,
+    //     "name": "TOMATOES",
+    //     "photo": "base64 string"
+    // }
+  }
+
+
+
   static async getProductsByCategory(category){
     const endpoint = '/client/getProductsByCategory';
     const params = { category: category };
@@ -47,6 +63,19 @@ class Product extends ServerBase {
     // data = {name: "string", photo: "base64 string"}
     const endpoint = '/client/addCategory';
     const response = await this.postRequest(endpoint, data); 
+    return response;
+  }
+  static async updateCategory(data){
+    // data = {name: "string", photo: "base64 string"}
+    const endpoint = '/client/updateCategory';
+    const response = await this.postRequest(endpoint, data); 
+    return response;
+  }
+
+  static async deleteCategory(categoryName){
+    const endpoint = '/client/deleteCategoryByName';
+    const params = { name: categoryName };
+    const response = await this.deleteRequest(endpoint, params); 
     return response;
   }
 

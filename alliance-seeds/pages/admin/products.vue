@@ -3,8 +3,53 @@
 
   <div class="container mt-5">
     <div class="row tm-content-row">
-      <div class="col-sm-12 col-md-12 col-lg-8 col-xl-8 tm-block-col">
+      <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4 tm-block-col">
         <div class="tm-bg-primary-dark tm-block tm-block-products">
+          <h2 class="tm-block-title">Product Categories</h2>
+          <div class="tm-product-table-container ">
+            <table  class="table table-hover tm-table-small tm-product-table ">
+              <tbody>
+                <tr>
+                  <td class="tm-product-name"  @click="setCategory('ALL')">All</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                
+                <tr v-for="category in categoryNames" >
+                  <td class="tm-product-name" @click="setCategory(category)">{{ category }}</td>
+                  <td></td>
+                  <td >
+                    <a :href="`/admin/editCategory?category=${category}`">
+                      <Icon
+                        name="teenyicons:edit-circle-outline"
+                        mode="svg"
+                        style="color: white"
+                        size="2rem"
+                      />
+                    </a>
+                  </td>
+                  <td class="text-center">
+                    <a href="#" class="tm-product-delete-link">
+                      <i class="far fa-trash-alt tm-product-delete-icon"></i>
+                    </a>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <!-- table container -->
+          <a
+            href="addCategory"
+            class="btn btn-primary btn-block text-uppercase mb-3"
+            >Add Category</a
+          >
+        </div>
+      </div>
+      <div class="col-sm-12 col-md-12 col-lg-8 col-xl-8 tm-block-col">
+        <div class="tm-bg-primary-dark tm-block tm-block-products"> 
+          <!-- tm-block-products -->
+
           <div class="tm-product-table-container">
             <table class="table tm-table-small tm-product-table">
               <thead>
@@ -41,6 +86,7 @@
                     </a>
                   </td> -->
                 </tr>
+               
               </tbody>
             </table>
           </div>
@@ -55,50 +101,7 @@
           </button>
         </div>
       </div>
-      <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4 tm-block-col">
-        <div class="tm-bg-primary-dark tm-block tm-block-product-categories">
-          <h2 class="tm-block-title">Product Categories</h2>
-          <div class="tm-product-table-container">
-            <table  class="table table-hover tm-table-small tm-product-table">
-              <tbody>
-                <tr @click="setCategory('ALL')">
-                  <td class="tm-product-name">All</td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
 
-                </tr>
-
-                <tr v-for="category in categoryNames" @click="setCategory(category)">
-                  <td class="tm-product-name">{{ category }}</td>
-                  <td></td>
-                  <td>
-                    <a href="#">
-                      <Icon
-                        name="teenyicons:edit-circle-outline"
-                        mode="svg"
-                        style="color: white"
-                        size="2rem"
-                      />
-                    </a>
-                  </td>
-                  <td class="text-center">
-                    <a href="#" class="tm-product-delete-link">
-                      <i class="far fa-trash-alt tm-product-delete-icon"></i>
-                    </a>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <!-- table container -->
-          <a
-            href="addCategory"
-            class="btn btn-primary btn-block text-uppercase mb-3"
-            >Add Category</a
-          >
-        </div>
-      </div>
     </div>
   </div>
 </template>
@@ -193,6 +196,12 @@ export default {
       console.log("selected category: ", category);
       this.currentCategory = category;
       await this.fetchProducts();
+    },
+
+    async editCategory(category){
+      console.log("edit: " + category);
+      this.$router.push("/admin");
+
     }
   },
 };

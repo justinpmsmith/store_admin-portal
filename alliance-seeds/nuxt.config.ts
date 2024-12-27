@@ -15,5 +15,7 @@ export default defineNuxtConfig({
   ],
   plugins: [
     { src: '~/plugins/bootstrap.ts', mode: 'client' },
+    { src: '~/plugins/router-error-handler.js', mode: 'client' },
+
   ],
 });
