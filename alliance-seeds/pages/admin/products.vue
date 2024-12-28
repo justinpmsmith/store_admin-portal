@@ -13,7 +13,7 @@
                   <td class="tm-product-name"  @click="setCategory('ALL')">All</td>
                   <td></td>
                   <td></td>
-                  <td></td>
+                  <!-- <td></td> -->
                 </tr>
                 
                 <tr v-for="category in categoryNames" >
@@ -29,11 +29,11 @@
                       />
                     </a>
                   </td>
-                  <td class="text-center">
+                  <!-- <td class="text-center">
                     <a href="#" class="tm-product-delete-link">
                       <i class="far fa-trash-alt tm-product-delete-icon"></i>
                     </a>
-                  </td>
+                  </td> -->
                 </tr>
               </tbody>
             </table>
@@ -58,7 +58,7 @@
                   <th scope="col">PRODUCT NAME</th>
                   <th scope="col">Product Code</th>
                   <th scope="col">Category</th>
-                  <th scope="col">Packaing</th>
+                  <th scope="col">Quantity</th>
                   <th scope="col">&nbsp;</th>
                   <!-- <th scope="col">&nbsp;</th> -->
                 </tr>
@@ -92,11 +92,11 @@
           </div>
           <!-- table container -->
           <a
-            href="#"
+            href="/admin/addProduct"
             class="btn btn-primary btn-block text-uppercase mb-3"
             >Add new product</a
           >
-          <button class="btn btn-primary btn-block text-uppercase" @click="deleteSelectedProducts">
+          <button v-if="selectedProdCodes.length > 0" class="btn btn-danger btn-block text-uppercase" @click="deleteSelectedProducts">
             Delete selected products
           </button>
         </div>
