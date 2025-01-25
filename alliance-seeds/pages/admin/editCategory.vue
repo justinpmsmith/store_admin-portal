@@ -16,12 +16,17 @@
                 class="tm-edit-product-form"
               >
                 <div class="col-md-12 mx-auto mb-4">
-                  <h2
-                    v-if="category != null"
-                    class="tm-block-title d-inline-block"
-                  >
-                    {{ category.name }}
-                  </h2>
+                  <div class="form-group mb-3">
+                    <label for="name">Category Name</label>
+                    <input
+                      id="name"
+                      name="name"
+                      type="text"
+                      class="form-control validate"
+                      v-model="categoryName"
+                      disabled
+                    />
+                  </div>
 
                   <div
                     class="tm-product-img-dummy mx-auto"
@@ -155,7 +160,7 @@ export default {
           hideProgressBar: true,
         });
         setTimeout(() => {
-            this.$router.replace("/admin/products");
+          this.$router.replace("/admin/products");
         }, 3000);
         return;
       }
@@ -174,7 +179,7 @@ export default {
           hideProgressBar: true,
         });
         setTimeout(() => {
-            this.$router.replace("/admin/products");
+          this.$router.replace("/admin/products");
         }, 3000);
         return;
       } else {
@@ -187,3 +192,13 @@ export default {
   },
 };
 </script>
+
+<style>
+input:disabled {
+  background-color: #2d3748 !important;  /* Dark background */
+  color: #cbd5e0 !important;             /* Light gray text */
+  opacity: 0.8;                          /* Slight opacity to indicate disabled state */
+  cursor: not-allowed;                   /* Show not-allowed cursor */
+  border-color: #4a5568 !important;      /* Darker border */
+}
+</style>

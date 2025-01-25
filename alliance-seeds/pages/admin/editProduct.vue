@@ -1,18 +1,17 @@
 <template>
   <br />
   <div>
-    <navbar></navbar>
     <div>
       <div class="col-xl-9 col-lg-10 col-md-12 col-sm-12 mx-auto">
         <div class="tm-bg-primary-dark tm-block tm-block-h-auto">
           <div>
             <div class="col-12 d-flex justify-content-center">
-              <h2 class="tm-block-title d-inline-block">Add Product</h2>
+              <h2 class="tm-block-title d-inline-block">Edit Product</h2>
             </div>
           </div>
           <div class="row tm-edit-product-row d-flex justify-content-center">
             <div class="col-xl-6 col-lg-6 col-md-12">
-              <form @submit.prevent="addProduct" class="tm-edit-product-form">
+              <form @submit.prevent="updateProduct" class="tm-edit-product-form">
                 <div class="form-group mb-3">
                   <label for="name">Product Name</label>
                   <input
@@ -70,7 +69,7 @@
                       class="form-control validate"
                       data-large-mode="true"
                       v-model="prodCode"
-                      required
+                      disabled
                     />
                   </div>
                   <div class="form-group mb-3 col-xs-12 col-sm-6">
@@ -118,13 +117,10 @@
                     </v-btn>
                   </div>
                 </div>
-                <!-- New Document Upload Section -->
+                <!-- Document Upload Section -->
                 <div class="col-md-12 mx-auto mb-4 mt-8">
                   <div v-if="documentName" class="mt-3">
-                    
-                   
                     <label style="color: aliceblue;"><b> {{ truncatedDocumentName }} </b></label>
-                    
                   </div>
                   <div class="custom-file mb-3">
                     <input
@@ -153,7 +149,13 @@
                     type="submit"
                     class="btn btn-primary btn-block text-uppercase"
                   >
-                    Add Product Now
+                    Update Product
+                  </button>
+                  <button
+                    class="btn btn-danger btn-block text-uppercase mt-4"
+                    @click.prevent="deleteProduct"
+                  >
+                    Delete Product
                   </button>
                 </div>
               </form>
@@ -179,10 +181,11 @@ export default {
   data() {
     return {
       session: null,
+      prodCode: "",
+      product: null,
       productName: "",
       categoryNames: [],
-      description: "sss",
-      prodCode: "",
+      description: "",
       quantity: 1,
       images: [],
       category: "",
@@ -192,11 +195,41 @@ export default {
     };
   },
   async mounted() {
-    this.session = useSessionStore();
+    // toast("Loading Product", { autoClose: 3000});
 
+    this.session = useSessionStore();
+    this.prodCode = this.$route.query.prodCode;
+    
+    // Get category names for dropdown
     let getCategoryNameResp = await Product.getCategoryNames();
     if (getCategoryNameResp != null) {
       this.categoryNames = getCategoryNameResp.data;
+    }
+
+    // Get product details
+
+    let getProductResp = await Product.getProductByProdCode(this.prodCode);
+    if (getProductResp != null && getProductResp.meta.success) {
+      this.product = getProductResp.data;
+      // Populate form fields with product data
+      this.productName = this.product.name;
+      this.category = this.product.category;
+      
+      // Parse the info JSON string to get description
+      const info = JSON.parse(this.product.info);
+      this.description = info.description;
+      
+      // Parse the photos JSON string
+      this.images = JSON.parse(this.product.photos);
+      
+      // Parse the document JSON string
+      if (this.product.document) {
+        const docData = JSON.parse(this.product.document);
+        this.document = docData.content;
+        this.documentName = docData.name;
+      }
+      
+      this.quantity = this.product.quantity;
     }
   },
   computed: {
@@ -244,7 +277,7 @@ export default {
       this.document = null;
       this.documentName = "";
     },
-    async addProduct() {
+    async updateProduct() {
       let data = {
         name: this.productName,
         prodCode: this.prodCode,
@@ -252,26 +285,38 @@ export default {
         info: JSON.stringify({description: this.description}),
         photos: JSON.stringify(this.images),
         quantity: this.quantity,
-        document: JSON.stringify({name:this.documentName, content: this.document}),
-      }
+        document: JSON.stringify({name: this.documentName, content: this.document}),
+      };
 
-      console.log("data", data);
+      let response = await Product.updateProduct(data);
 
-      let response = await Product.addProduct(data);
-
-      if(response != null && response.meta.success){
-        toast.success("PRoduct Added", { autoClose: 3000, hideProgressBar: true });
-        setTimeout(()=>{this.$router.replace("/admin/products");}, 3000);
+      if(response != null && response.meta.success) {
+        toast.success("Product Updated", { autoClose: 3000, hideProgressBar: true });
+        setTimeout(() => {
+          this.$router.replace("/admin/products");
+        }, 3000);
         return;
       }
 
-      if(response != null){
+      if(response != null) {
         toast.error(response.meta.message, { autoClose: 3000, hideProgressBar: true });
         return;
       }
-      toast.error("There was an error adding product", { autoClose: 3000, hideProgressBar: true });
+      toast.error("There was an error updating product", { autoClose: 3000, hideProgressBar: true });
     },
-  },
+    async deleteProduct() {
+      let response = await Product.deleteProductByProdCode(this.prodCode);
+
+      if(response != null && response.meta.success) {
+        toast.success("Product Deleted", { autoClose: 3000, hideProgressBar: true });
+        setTimeout(() => {
+          this.$router.replace("/admin/products");
+        }, 3000);
+        return;
+      }
+      toast.error("There was an error deleting product", { autoClose: 3000, hideProgressBar: true });
+    }
+  }
 };
 </script>
 
@@ -280,15 +325,19 @@ export default {
   position: fixed;
   bottom: 0;
 }
-.cat-image {
-  height: 300px; /* Set your desired height here */
-  width: auto;
-  object-fit: contain;
-}
 
 .img-thumbnail {
   max-width: 100%;
-  max-height: 300px; /* Adjust this value as needed */
+  max-height: 300px;
   object-fit: contain;
+}
+
+/* Style for disabled input field */
+input:disabled {
+  background-color: #2d3748 !important;  /* Dark background */
+  color: #cbd5e0 !important;             /* Light gray text */
+  opacity: 0.8;                          /* Slight opacity to indicate disabled state */
+  cursor: not-allowed;                   /* Show not-allowed cursor */
+  border-color: #4a5568 !important;      /* Darker border */
 }
 </style>

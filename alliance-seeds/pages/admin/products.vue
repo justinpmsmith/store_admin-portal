@@ -1,9 +1,68 @@
 <template>
-  <navbar></navbar>
+    <product-navbar 
+    :categories="categoryNames"
+    :onCategorySelected="setCategory"
+  />
 
   <div class="container mt-5">
     <div class="row tm-content-row">
-      <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4 tm-block-col">
+
+      <div class="col-sm-12 col-md-12 col-lg-8 col-xl-8 tm-block-col">
+        <div class="tm-bg-primary-dark tm-block tm-block-products"> 
+          <!-- tm-block-products -->
+
+          <div class="tm-product-table-container">
+            <table class="table tm-table-small tm-product-table">
+              <thead>
+                <tr>
+                  <th scope="col">&nbsp;</th>
+                  <th scope="col">PRODUCT NAME</th>
+                  <th scope="col">Product Code</th>
+                  <th scope="col">Category</th>
+                  <th scope="col">Quantity</th>
+                  <th scope="col">&nbsp;</th>
+                  <!-- <th scope="col">&nbsp;</th> -->
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="product in products" :key="product.prodCode">
+                  <th scope="row"><input type="checkbox" @change="toggleProductSelection(product.prodCode, $event)"/></th>
+                  <td class="tm-product-name">{{ product.name }}</td>
+                  <td>{{ product.prodCode }}</td>
+                  <td>{{ product.category }}</td>
+                  <td>{{ product.quantity }}</td>
+                  <td>
+                    <a :href="`/admin/editProduct?prodCode=${product.prodCode}`">
+                      <Icon
+                        name="teenyicons:edit-circle-outline"
+                        mode="svg"
+                        style="color: white"
+                        size="2rem"
+                      />
+                    </a>
+                  </td>
+                  <!-- <td>
+                    <a href="#" class="tm-product-delete-link">
+                      <i class="far fa-trash-alt tm-product-delete-icon"></i>
+                    </a>
+                  </td> -->
+                </tr>
+               
+              </tbody>
+            </table>
+          </div>
+          <!-- table container -->
+          <a
+            href="/admin/addProduct"
+            class="btn btn-primary btn-block text-uppercase mb-3"
+            >Add new product</a
+          >
+          <button v-if="selectedProdCodes.length > 0" class="btn btn-danger btn-block text-uppercase" @click="deleteSelectedProducts">
+            Delete selected products
+          </button>
+        </div>
+      </div>
+      <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4 tm-block-col"> 
         <div class="tm-bg-primary-dark tm-block tm-block-products">
           <h2 class="tm-block-title">Product Categories</h2>
           <div class="tm-product-table-container ">
@@ -46,68 +105,13 @@
           >
         </div>
       </div>
-      <div class="col-sm-12 col-md-12 col-lg-8 col-xl-8 tm-block-col">
-        <div class="tm-bg-primary-dark tm-block tm-block-products"> 
-          <!-- tm-block-products -->
-
-          <div class="tm-product-table-container">
-            <table class="table tm-table-small tm-product-table">
-              <thead>
-                <tr>
-                  <th scope="col">&nbsp;</th>
-                  <th scope="col">PRODUCT NAME</th>
-                  <th scope="col">Product Code</th>
-                  <th scope="col">Category</th>
-                  <th scope="col">Quantity</th>
-                  <th scope="col">&nbsp;</th>
-                  <!-- <th scope="col">&nbsp;</th> -->
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="product in products" :key="product.prodCode">
-                  <th scope="row"><input type="checkbox" @change="toggleProductSelection(product.prodCode, $event)"/></th>
-                  <td class="tm-product-name">{{ product.name }}</td>
-                  <td>{{ product.prodCode }}</td>
-                  <td>{{ product.category }}</td>
-                  <td>{{ product.quantity }}</td>
-                  <td>
-                    <a href="#" >
-                      <Icon
-                        name="teenyicons:edit-circle-outline"
-                        mode="svg"
-                        style="color: white"
-                        size="2rem"
-                      />
-                    </a>
-                  </td>
-                  <!-- <td>
-                    <a href="#" class="tm-product-delete-link">
-                      <i class="far fa-trash-alt tm-product-delete-icon"></i>
-                    </a>
-                  </td> -->
-                </tr>
-               
-              </tbody>
-            </table>
-          </div>
-          <!-- table container -->
-          <a
-            href="/admin/addProduct"
-            class="btn btn-primary btn-block text-uppercase mb-3"
-            >Add new product</a
-          >
-          <button v-if="selectedProdCodes.length > 0" class="btn btn-danger btn-block text-uppercase" @click="deleteSelectedProducts">
-            Delete selected products
-          </button>
-        </div>
-      </div>
 
     </div>
   </div>
 </template>
 
 <script>
-import navbar from "~/components/admin/navbar.vue";
+import ProductNavbar from "~/components/admin/productNavbar.vue";
 import useSessionStore from "~/stores/session";
 import Product from "~/services/server/product";
 import { toast } from "vue3-toastify";
@@ -121,7 +125,7 @@ export default {
     };
   },
   components: {
-    navbar,
+    ProductNavbar,
   },
   data() {
     return {
@@ -138,6 +142,8 @@ export default {
   },
   methods: {
     async fetchProducts() {
+      // toast("Loading Products", { autoClose: 3000});
+
     // get products 
       let getProductsResp;
       if (this.currentCategory.toUpperCase() == "ALL") {

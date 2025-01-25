@@ -56,6 +56,22 @@ class Product extends ServerBase {
     //   },
     // ]
   }
+  static async getProductByProdCode(prodCode) {
+    const endpoint = "/client/getProductByProdCode";
+    const params = { prodCode: prodCode };
+    const response = await this.getRequest(endpoint, params);
+    return response;
+
+    // response = {
+    //     prodCode: "string",
+    //     category: "string",
+    //     name: "string",
+    //     document: "base64 string",
+    //     info: "json string",
+    //     quantity: int,
+    //   }
+
+  }
 
   static async addCtegory(data) {
     // data = {name: "string", photo: "base64 string"}
@@ -72,9 +88,26 @@ class Product extends ServerBase {
     //   info: { description: this.description },
     //   photos: JSON.stringify(images),
     //   quantity: this.quantity,
+    //   document: json string
     // };
 
     const endpoint = "/client/addProduct";
+    const response = await this.postRequest(endpoint, data);
+    return response;
+  }
+
+  static async updateProduct(data) {
+    // let data = {
+    //   name: this.productName,
+    //   prodCode: this.prodCode,
+    //   category: this.category,
+    //   info: { description: this.description },
+    //   photos: JSON.stringify(images),
+    //   quantity: this.quantity,
+    //   document: json string
+    // };
+
+    const endpoint = "/client/updateProduct";
     const response = await this.postRequest(endpoint, data);
     return response;
   }
@@ -93,6 +126,7 @@ class Product extends ServerBase {
   }
 
   static async deleteProductByProdCode(prodCode) {
+    // prodCode = "string prodCode"
     const endpoint = "/client/deleteProductByProdCode";
     const params = { prodCode: prodCode };
     const response = await this.deleteRequest(endpoint, params);
