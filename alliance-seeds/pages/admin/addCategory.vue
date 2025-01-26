@@ -1,79 +1,88 @@
 <template>
   <br />
   <div>
-    <div>
-      <div class="col-xl-9 col-lg-10 col-md-12 col-sm-12 mx-auto">
-        <div class="tm-bg-primary-dark tm-block tm-block-h-auto">
-          <div>
-            <div class="col-12 d-flex justify-content-center">
-              <h2 class="tm-block-title d-inline-block">Add Category</h2>
-            </div>
+    <navbar></navbar>
+
+    <div class="col-xl-9 col-lg-10 col-md-12 col-sm-12 mx-auto">
+      <div class="tm-bg-primary-dark tm-block tm-block-h-auto">
+        <div>
+          <div class="col-12 d-flex justify-content-center">
+            <h2 class="tm-block-title d-inline-block">Add Category</h2>
           </div>
-          <div class="row tm-edit-product-row d-flex justify-content-center">
-            <div class="col-xl-6 col-lg-6 col-md-12">
-              <form @submit.prevent="addCategory" class="tm-edit-product-form">
-                <div class="form-group mb-3">
-                  <label for="name">Category Name</label>
-                  <input
-                    id="name"
-                    name="name"
-                    type="text"
-                    class="form-control validate"
-                    v-model="categoryName"
-                    required
+        </div>
+        <div class="row tm-edit-product-row d-flex justify-content-center">
+          <div class="col-xl-6 col-lg-6 col-md-12">
+            <form @submit.prevent="addCategory" class="tm-edit-product-form">
+              <div class="form-group mb-3">
+                <label for="name">Category Name</label>
+                <input
+                  id="name"
+                  name="name"
+                  type="text"
+                  class="form-control validate"
+                  v-model="categoryName"
+                  required
+                />
+              </div>
+
+              <div class="col-md-12 mx-auto mb-4">
+                <div
+                  class="tm-product-img-dummy mx-auto"
+                  v-if="!categoryImage"
+                  ref="dummyImage"
+                >
+                  <i
+                    class="fas fa-cloud-upload-alt tm-upload-icon"
+                    onclick="document.getElementById('fileInput').click();"
+                  ></i>
+                </div>
+                <div class="tm-product-img-dummy mx-auto" v-else>
+                  <img
+                    :src="categoryImage"
+                    alt="Selected Image"
+                    class="img-fluid"
+                    :style="{ height: dummyImageHeight + 'px' }"
                   />
                 </div>
-
-                <div class="col-md-12 mx-auto mb-4">
-                  <div
-                    class="tm-product-img-dummy mx-auto"
-                    v-if="!categoryImage"
-                    ref="dummyImage"
-                  >
-                    <i
-                      class="fas fa-cloud-upload-alt tm-upload-icon"
-                      onclick="document.getElementById('fileInput').click();"
-                    ></i>
-                  </div>
-                  <div class="tm-product-img-dummy mx-auto" v-else>
-                    <img
-                      :src="categoryImage"
-                      alt="Selected Image"
-                      class="img-fluid"
-                      :style="{ height: dummyImageHeight + 'px' }"
-                    />
-                  </div>
-                  <div class="custom-file mt-3 mb-3">
-                    <input
-                      id="fileInput"
-                      type="file"
-                      style="display: none"
-                      @change="onFileChange"
-                    />
-                    <!-- <input
+                <div class="custom-file mt-3 mb-3">
+                  <input
+                    id="fileInput"
+                    type="file"
+                    style="display: none"
+                    @change="onFileChange"
+                  />
+                  <!-- <input
                       type="button"
                       class="btn btn-primary btn-block mx-auto"
                       value="UPLOAD CATEGORY IMAGE"
                       onclick="document.getElementById('fileInput').click();"
                     /> -->
-                    <!-- <v-btn onclick="document.getElementById('fileInput').click();"> Delete Previous image </v-btn>
+                  <!-- <v-btn onclick="document.getElementById('fileInput').click();"> Delete Previous image </v-btn>
                     <br>
                     <br> -->
-                    <v-btn onclick="document.getElementById('fileInput').click();"> UPLOAD CATEGORY IMAGE  </v-btn>
-                    <v-btn v-if="categoryImage" class="ml-2" @click="categoryImage=null"> Remove image  </v-btn>
-
-                  </div>
-                </div>
-                <div class="col-12">
-                  <button
-                    type="submit"
-                    class="btn btn-primary btn-block text-uppercase"
+                  <v-btn
+                    onclick="document.getElementById('fileInput').click();"
                   >
-                    Add Category Now
-                  </button>
+                    UPLOAD CATEGORY IMAGE
+                  </v-btn>
+                  <v-btn
+                    v-if="categoryImage"
+                    class="mt-2"
+                    @click="categoryImage = null"
+                  >
+                    Remove image
+                  </v-btn>
                 </div>
-              </form>
-            </div>
+              </div>
+              <div class="col-12">
+                <button
+                  type="submit"
+                  class="btn btn-primary btn-block text-uppercase"
+                >
+                  Add Category Now
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       </div>
@@ -87,7 +96,6 @@ import useSessionStore from "~/stores/session";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 import Product from "@/services/server/product";
-
 
 export default {
   name: "IndexPage",
@@ -125,17 +133,24 @@ export default {
       let data = {
         name: this.categoryName,
         photo: this.categoryImage,
-      }
+      };
 
       let response = await Product.addCtegory(data);
 
-      if(response != null && response.meta.success){
-        toast.success("Category Added", { autoClose: 3000, hideProgressBar: true });
-        setTimeout(()=>{this.$router.replace("/admin/products");}, 3000);
+      if (response != null && response.meta.success) {
+        toast.success("Category Added", {
+          autoClose: 3000,
+          hideProgressBar: true,
+        });
+        setTimeout(() => {
+          this.$router.replace("/admin/products");
+        }, 3000);
         return;
       }
-      toast.error("There was an error adding category", { autoClose: 3000, hideProgressBar: true });
-
+      toast.error("There was an error adding category", {
+        autoClose: 3000,
+        hideProgressBar: true,
+      });
     },
   },
 };

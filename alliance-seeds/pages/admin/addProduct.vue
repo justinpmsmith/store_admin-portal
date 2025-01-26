@@ -260,7 +260,7 @@ export default {
       let response = await Product.addProduct(data);
 
       if(response != null && response.meta.success){
-        toast.success("PRoduct Added", { autoClose: 3000, hideProgressBar: true });
+        toast.success("Product Added", { autoClose: 3000, hideProgressBar: true });
         setTimeout(()=>{this.$router.replace("/admin/products");}, 3000);
         return;
       }

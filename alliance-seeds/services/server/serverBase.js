@@ -14,7 +14,6 @@ class ServerBase {
         const queryString = new URLSearchParams(params).toString();
         url += `?${queryString}`;
       }
-      console.log("endpoint: " + url);
 
       let config = {
         method: "get",
@@ -51,8 +50,6 @@ class ServerBase {
         data: JSON.stringify(data),
       };
 
-      console.log("post config:");
-      console.log(config);
 
       const response = await axios.request(config);
 
@@ -75,7 +72,6 @@ class ServerBase {
         const queryString = new URLSearchParams(params).toString();
         url += `?${queryString}`;
       }
-      console.log("endpoint: " + url);
   
       let config = {
         method: "delete",
@@ -96,6 +92,12 @@ class ServerBase {
   
     return null;
   }
+
+  static async tokenStillValid(){
+    
+  }
+
+  
 }
 
 export default ServerBase;

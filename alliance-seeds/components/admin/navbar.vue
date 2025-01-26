@@ -1,7 +1,7 @@
 <template>
 <nav class="navbar navbar-expand-xl">
     <div class="container h-100">
-      <a class="navbar-brand" href="index.html">
+      <a class="navbar-brand" href="/admin/products">
         <h1 class="tm-site-title mb-0">Product Admin</h1>
       </a>
       <button
@@ -19,13 +19,12 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mx-auto h-100">
           <li class="nav-item">
-            <a class="nav-link" style="color: white;">
-              <Icon name="ic:outline-question-answer" mode="svg" style="color: white" size="2rem"/>
-               Dashboard
-              <span class="sr-only">(current)</span>
+            <a class="nav-link" href="/admin/products">
+              <Icon name="material-symbols:garage-home-rounded" mode="svg" style="color: white" size="2rem" />
+              <span>Home</span>
             </a>
           </li>
-          <li class="nav-item dropdown">
+          <!-- <li class="nav-item dropdown">
             <a
               class="nav-link dropdown-toggle"
               href="#"
@@ -43,19 +42,21 @@
               <a class="dropdown-item" href="#">Weekly Report</a>
               <a class="dropdown-item" href="#">Yearly Report</a>
             </div>
-          </li>
+          </li> -->
           <li class="nav-item">
-            <a class="nav-link" href="products.html">
-              <i class="fas fa-shopping-cart"></i> Products
+            <a class="nav-link" href="/admin/addProduct">
+              <Icon name="material-symbols:shopping-cart" mode="svg" style="color: white" size="2rem" />
+              <span>Add Product</span>
             </a>
           </li>
 
           <li class="nav-item">
-            <a class="nav-link" href="accounts.html">
-              <i class="far fa-user"></i> Accounts
+            <a class="nav-link"  href="/admin/addCategory">
+              <Icon name="tabler:category-plus" mode="svg" style="color: white" size="2rem" />
+              Add Category
             </a>
           </li>
-          <li class="nav-item dropdown">
+          <!-- <li class="nav-item dropdown">
             <a
               class="nav-link dropdown-toggle"
               href="#"
@@ -73,7 +74,7 @@
               <a class="dropdown-item" href="#">Billing</a>
               <a class="dropdown-item" href="#">Customize</a>
             </div>
-          </li>
+          </li> -->
         </ul>
       </div>
     </div>

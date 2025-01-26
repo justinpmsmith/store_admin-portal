@@ -1,55 +1,70 @@
-# productNavbar.vue
+
 <template>
-<nav class="navbar navbar-expand-xl">
-    <div class="container h-100">
-      <!-- Brand always on left -->
-      <a class="navbar-brand" href="index.html">
-        <h1 class="tm-site-title mb-0">PRODUCT ADMIN</h1>
-      </a>
-
-      <!-- Mobile toggle button -->
-      <button
-        class="navbar-toggler ml-auto mr-0"
-        type="button"
-        data-toggle="collapse"
-        data-target="#navbarSupportedContent"
-        aria-controls="navbarSupportedContent"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
-        ref="navToggle"
-      >
-        <i class="fas fa-bars tm-nav-icon"></i>
-      </button>
-
-      <!-- Navbar content -->
-      <div 
-        class="collapse navbar-collapse" 
-        id="navbarSupportedContent" 
-        ref="navContent"
-      >
-        <ul class="navbar-nav mx-auto h-100" ref="navList">
-            
-          <!-- All option -->
-          <li class="nav-item">
-            <a class="nav-link" @click="onCategoryClick('ALL')" style="color: white;">
-              <i class="fas fa-shopping-cart"></i>
-              All
-              <span class="sr-only">(current)</span>
-            </a>
-          </li>
-
-          <!-- Dynamic category items -->
-          <li class="nav-item" v-for="category in categories" :key="category">
-            <a class="nav-link" @click="onCategoryClick(category)" style="color: white;">
-              <i class="fas fa-shopping-cart"></i>
-              {{ category }}
-            </a>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </nav>
-</template>
+    <nav class="navbar navbar-expand-xl">
+        <div class="container h-100">
+          <a class="navbar-brand" href="/admin/products">
+            <h1 class="tm-site-title mb-0">PRODUCT ADMIN</h1>
+          </a>
+          <button
+            class="navbar-toggler ml-auto mr-0"
+            type="button"
+            data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+            ref="navToggle"
+          >
+            <i class="fas fa-bars tm-nav-icon"></i>
+          </button>
+    
+          <div 
+            class="collapse navbar-collapse" 
+            id="navbarSupportedContent" 
+            ref="navContent"
+          >
+            <ul class="navbar-nav mx-auto h-100" ref="navList">
+              <!-- Add dropdown -->
+              <li class="nav-item dropdown">
+                <a
+                  class="nav-link dropdown-toggle"
+                  href="#"
+                  id="addDropdown"
+                  role="button"
+                  data-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                >
+                  <i class="fas fa-cog"></i>
+                  <span> Add <i class="fas fa-angle-down"></i> </span>
+                </a>
+                <div class="dropdown-menu" aria-labelledby="addDropdown">
+                  <a class="dropdown-item" href="#">Add Product</a>
+                  <a class="dropdown-item" href="#">Add Category</a>
+                </div>
+              </li>
+    
+              <!-- All option -->
+              <li class="nav-item">
+                <a class="nav-link" @click="onCategoryClick('ALL')" style="color: white;">
+                  <i class="fas fa-shopping-cart"></i>
+                  All
+                  <span class="sr-only">(current)</span>
+                </a>
+              </li>
+    
+              <!-- Dynamic category items -->
+              <li class="nav-item" v-for="category in categories" :key="category">
+                <a class="nav-link" @click="onCategoryClick(category)" style="color: white;">
+                  <i class="fas fa-shopping-cart"></i>
+                  {{ category }}
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </template>
 
 <script>
 export default {

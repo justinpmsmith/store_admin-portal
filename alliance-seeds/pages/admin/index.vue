@@ -1,6 +1,6 @@
 <template>
   <div>
-    <navbar></navbar>
+    <!-- <navbar></navbar> -->
 
     <div class="container tm-mt-big tm-mb-big">
       <div class="row">
