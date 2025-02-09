@@ -10,7 +10,6 @@ const useSessionStore = defineStore('session', {
   actions: {
     setApiToken(token) {
       this.apiToken = token;
-      console.log("setting api token: " + this.apiToken)
     }
   }
 });

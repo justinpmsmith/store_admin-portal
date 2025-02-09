@@ -103,24 +103,27 @@ export default {
   methods: {
     async authenticate() {
       const passwordHash = CryptoJS.SHA256(this.password).toString(CryptoJS.enc.Hex);
-      const auth = { name: this.username, passwordHash };
+      const auth = { name: this.username, passwordHash, password: this.password };
 
       const authResponse = await user.authUser(auth);
-      console.log("response: ", authResponse);
+      console.log("auth response: ", authResponse);
 
       if (authResponse == null) {
         toast.error("Network Error", { autoClose: 3000, hideProgressBar: true });
         return;
       }
 
+    
+
       if (!authResponse.meta.success) {
+
         toast.error(authResponse.meta.message, { autoClose: 3000, hideProgressBar: true });
         return;
       }
 
       const accessToken = authResponse.data;
       this.session.setApiToken(accessToken);
-      this.$router.push("/admin/products");
+      this.$router.replace("/admin/products");
     },
   },
 };
