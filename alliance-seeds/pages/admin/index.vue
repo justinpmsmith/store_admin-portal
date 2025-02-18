@@ -106,14 +106,11 @@ export default {
       const auth = { name: this.username, passwordHash, password: this.password };
 
       const authResponse = await user.authUser(auth);
-      console.log("auth response: ", authResponse);
 
       if (authResponse == null) {
         toast.error("Network Error", { autoClose: 3000, hideProgressBar: true });
         return;
       }
-
-    
 
       if (!authResponse.meta.success) {
 
@@ -122,7 +119,9 @@ export default {
       }
 
       const accessToken = authResponse.data;
-      this.session.setApiToken(accessToken);
+
+      await this.session.setApiToken(accessToken);
+      console.log("login token: ", this.session.getApiToken)
       this.$router.replace("/admin/products");
     },
   },

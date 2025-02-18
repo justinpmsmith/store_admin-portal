@@ -266,6 +266,7 @@ export default {
       }
 
       if(response != null){
+        console.error()
         toast.error(response.meta.message, { autoClose: 3000, hideProgressBar: true });
         return;
       }

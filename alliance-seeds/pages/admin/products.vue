@@ -3,10 +3,10 @@
     :categories="categoryNames"
     :onCategorySelected="setCategory"
   /> -->
-  <newproduct-Navbar
+  <product-Navbar
     :categories="categoryNames"
     :onCategorySelected="setCategory"
-  ></newproduct-Navbar>
+  ></product-Navbar>
 
   <div class="container mt-5">
     <div class="row tm-content-row">
@@ -127,12 +127,11 @@
 </template>
 
 <script>
-import ProductNavbar from "~/components/admin/productNavbar.vue";
 import useSessionStore from "~/stores/session";
 import Product from "~/services/server/product";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
-import NewproductNavbar from "~/components/admin/newproductNavbar.vue";
+import ProductNavbar from "~/components/admin/productNavbar.vue";
 
 export default {
   name: "IndexPage",
@@ -143,7 +142,6 @@ export default {
   },
   components: {
     ProductNavbar,
-    NewproductNavbar,
   },
   data() {
     return {

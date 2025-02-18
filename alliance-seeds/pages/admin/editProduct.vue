@@ -1,6 +1,8 @@
 <template>
   <br />
   <div>
+    <navbar></navbar>
+
     <div>
       <div class="col-xl-9 col-lg-10 col-md-12 col-sm-12 mx-auto">
         <div class="tm-bg-primary-dark tm-block tm-block-h-auto">

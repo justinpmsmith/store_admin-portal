@@ -11,6 +11,11 @@ const useSessionStore = defineStore('session', {
     setApiToken(token) {
       this.apiToken = token;
     }
+  },
+  persist: {
+    // storage: sessionStorage ,  // default is localStorage
+    paths: ['apiToken']    // specify which state properties to persist
   }
 });
+
 export default useSessionStore;

@@ -11,7 +11,7 @@ class User extends ServerBase {
 
         if(response != null && response.meta.success) {
           console.log("passed if");
-          let accessToken = await this.getAccessToken(data.name, data.password, response.data);
+          let accessToken = await this.retrieveAccessToken(data.name, data.password, response.data);
           return accessToken;
         }
 

@@ -91,7 +91,7 @@ class Product extends ServerBase {
     //   document: json string
     // };
 
-    const endpoint = "/client/addProduct";
+    const endpoint = "/admin/addProduct";
     const response = await this.postRequest(endpoint, data);
     return response;
   }

@@ -6,6 +6,7 @@ export default defineNuxtConfig({
     'vuetify-nuxt-module',
     '@nuxt/icon',
     '@pinia/nuxt',
+    'pinia-plugin-persistedstate/nuxt'
   ],
   css: [
     // 'bootstrap/dist/css/bootstrap.css',
