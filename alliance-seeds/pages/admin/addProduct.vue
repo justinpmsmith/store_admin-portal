@@ -248,6 +248,7 @@ export default {
       let data = {
         name: this.productName,
         prodCode: this.prodCode,
+        price: this.price,
         category: this.category,
         info: JSON.stringify({description: this.description}),
         photos: JSON.stringify(this.images),

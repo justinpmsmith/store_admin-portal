@@ -75,7 +75,7 @@ class Product extends ServerBase {
 
   static async addCtegory(data) {
     // data = {name: "string", photo: "base64 string"}
-    const endpoint = "/client/addCategory";
+    const endpoint = "/admin/addCategory";
     const response = await this.postRequest(endpoint, data);
     return response;
   }
@@ -107,19 +107,19 @@ class Product extends ServerBase {
     //   document: json string
     // };
 
-    const endpoint = "/client/updateProduct";
+    const endpoint = "/admin/updateProduct";
     const response = await this.postRequest(endpoint, data);
     return response;
   }
   static async updateCategory(data) {
     // data = {name: "string", photo: "base64 string"}
-    const endpoint = "/client/updateCategory";
+    const endpoint = "/admin/updateCategory";
     const response = await this.postRequest(endpoint, data);
     return response;
   }
 
   static async deleteCategory(categoryName) {
-    const endpoint = "/client/deleteCategoryByName";
+    const endpoint = "/admin/deleteCategoryByName";
     const params = { name: categoryName };
     const response = await this.deleteRequest(endpoint, params);
     return response;
@@ -127,7 +127,7 @@ class Product extends ServerBase {
 
   static async deleteProductByProdCode(prodCode) {
     // prodCode = "string prodCode"
-    const endpoint = "/client/deleteProductByProdCode";
+    const endpoint = "/admin/deleteProductByProdCode";
     const params = { prodCode: prodCode };
     const response = await this.deleteRequest(endpoint, params);
     return response;

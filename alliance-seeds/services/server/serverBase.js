@@ -1,7 +1,7 @@
 import axios from "axios";
 import config from "~/config";
 import useSessionStore from "~/stores/session";
-import { useRouter } from 'vue-router'
+import { useRouter } from "vue-router";
 
 class ServerBase {
   static accessToken = null;
@@ -15,7 +15,7 @@ class ServerBase {
       let sessionStore = useSessionStore();
       return sessionStore.getApiToken;
     } catch (error) {
-      console.warn('Could not access session store:', error);
+      console.warn("Could not access session store:", error);
       return null;
     }
   }
@@ -23,58 +23,61 @@ class ServerBase {
     const router = useRouter();
     const token = this.getAccessToken();
     // console.log("amAuthenticated token: " + token);
-  
+
     // Check if token exists and is valid length
     if (!token || token.length < 10) {
       // await navigateTo('/admin');
       return false;
     }
-  
+
     try {
-      const url = (await this.getServerPath()) + '/admin/amAuth';
+      const url = (await this.getServerPath()) + "/admin/amAuth";
       const config = {
-        method: 'get',
-        maxBodyLength: Infinity,
-        url: url,
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      };
-  
-      const response = await axios.request(config);
-      return response.status === 200;
-    } catch (error) {
-      console.error('Authentication check failed:', error);
-    }
-    return false;
-
-  }
-
-
-  static async getRequest(endpoint, params = null) {
-    if (endpoint.includes('admin') && !(await this.amAuthenticated())) {
-      await navigateTo('/admin');
-      return null;
-    }
-  
-    try {
-      const token = this.getAccessToken();
-      let url = (await this.getServerPath()) + endpoint;
-  
-      if (params) {
-        const queryString = new URLSearchParams(params).toString();
-        url += `?${queryString}`;
-      }
-  
-      let config = {
         method: "get",
         maxBodyLength: Infinity,
         url: url,
         headers: {
-          'Authorization': token ? `Bearer ${token}` : undefined
-        }
+          Authorization: `Bearer ${token}`,
+        },
       };
-  
+
+      const response = await axios.request(config);
+      return response.status === 200;
+    } catch (error) {
+      console.error("Authentication check failed:", error);
+    }
+    return false;
+  }
+
+  static async getRequest(endpoint, params = null) {
+    const isAdminEndpoint = endpoint.includes("admin");
+
+    if (isAdminEndpoint && !(await this.amAuthenticated())) {
+      await navigateTo("/admin");
+      return null;
+    }
+
+    try {
+      let url = (await this.getServerPath()) + endpoint;
+
+      if (params) {
+        const queryString = new URLSearchParams(params).toString();
+        url += `?${queryString}`;
+      }
+
+      let headers = {};
+      if (isAdminEndpoint) {
+        const token = this.getAccessToken();
+        headers.Authorization = `Bearer ${token}`;
+      }
+
+      let config = {
+        method: "get",
+        maxBodyLength: Infinity,
+        url: url,
+        headers: headers,
+      };
+
       const response = await axios.request(config);
       return response.status === 200 ? response.data : null;
     } catch (error) {
@@ -84,27 +87,34 @@ class ServerBase {
   }
 
   static async postRequest(endpoint, data) {
-    if (endpoint.includes('admin') && !(await this.amAuthenticated())) {
-      // await navigateTo('/admin');
+    const isAdminEndpoint = endpoint.includes("admin");
+
+    if (isAdminEndpoint && !(await this.amAuthenticated())) {
+      await navigateTo("/admin");
 
       return null;
     }
-  
     try {
-      const token = this.getAccessToken();
       const url = (await this.getServerPath()) + endpoint;
-  
+      console.log("post endpoint: " + url);
+
+      let headers = {
+        "Content-Type": "application/json",
+      };
+
+      if (isAdminEndpoint) {
+        const token = this.getAccessToken();
+        headers.Authorization = `Bearer ${token}`;
+      }
+
       const config = {
         method: "post",
         maxBodyLength: Infinity,
         url: url,
-        headers: {
-          "Content-Type": "application/json",
-          'Authorization': token ? `Bearer ${token}` : undefined
-        },
-        data: JSON.stringify(data)
+        headers: headers,
+        data: JSON.stringify(data),
       };
-  
+
       const response = await axios.request(config);
       console.log("post response: ", response);
       return response.status === 200 ? response.data : null;
@@ -115,29 +125,34 @@ class ServerBase {
   }
 
   static async deleteRequest(endpoint, params = null) {
-    if (endpoint.includes('admin') && !(await this.amAuthenticated())) {
-      await navigateTo('/admin');
+    const isAdminEndpoint = endpoint.includes("admin");
+
+    if (isAdminEndpoint && !(await this.amAuthenticated())) {
+      await navigateTo("/admin");
       return null;
     }
-  
+
     try {
-      const token = this.getAccessToken();
       let url = (await this.getServerPath()) + endpoint;
-  
+
       if (params) {
         const queryString = new URLSearchParams(params).toString();
         url += `?${queryString}`;
       }
-  
+
+      let headers = {};
+      if (isAdminEndpoint) {
+        const token = this.getAccessToken();
+        headers.Authorization = `Bearer ${token}`;
+      }
+
       let config = {
         method: "delete",
         maxBodyLength: Infinity,
         url: url,
-        headers: {
-          'Authorization': token ? `Bearer ${token}` : undefined
-        }
+        headers: headers,
       };
-  
+
       const response = await axios.request(config);
       return response.status === 200 ? response.data : null;
     } catch (error) {
@@ -189,8 +204,6 @@ class ServerBase {
       };
     }
   }
-
-
 }
 
 export default ServerBase;

@@ -13,7 +13,7 @@
       <div class="col-sm-12 col-md-12 col-lg-8 col-xl-8 tm-block-col">
         <div class="tm-bg-primary-dark tm-block tm-block-products">
           <!-- tm-block-products -->
-
+          <h2 class="tm-block-title">{{ currentCategory }}</h2>
           <div class="tm-product-table-container">
             <table class="table tm-table-small tm-product-table">
               <thead>
