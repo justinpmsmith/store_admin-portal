@@ -1,0 +1,22 @@
+version: "3.8"
+networks:
+  codesmith-network:
+    name: codesmith
+    external: true
+services:
+  admin-portal:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: 'sportvest-admin-portal:0.0.1'
+    container_name: sportvest-admin-portal:0.0.1
+    networks:
+      - codesmith-network
+    ports:
+      - '3333:3000'
+      - '24679:24678'
+    volumes:
+      # Mount only the config file, not the entire directory
+      - ./config.js:/frontend/config.js:ro
+    stdin_open: true
+    tty: true

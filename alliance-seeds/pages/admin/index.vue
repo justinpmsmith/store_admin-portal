@@ -121,7 +121,6 @@ export default {
       const accessToken = authResponse.data;
 
       await this.session.setApiToken(accessToken);
-      console.log("login token: ", this.session.getApiToken)
       this.$router.replace("/admin/products");
     },
   },

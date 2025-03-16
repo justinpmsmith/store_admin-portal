@@ -56,6 +56,11 @@
               Add Category
             </a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/admin/soldProducts" >
+                <Icon name="material-symbols:sell" mode="svg" style="color: white" size="2rem" /> Sold Products
+            </a>
+          </li>
           <!-- <li class="nav-item dropdown">
             <a
               class="nav-link dropdown-toggle"

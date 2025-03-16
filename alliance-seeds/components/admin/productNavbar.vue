@@ -63,6 +63,11 @@
             </div>
           </li>
           <li class="nav-item">
+            <a class="nav-link" href="/admin/soldProducts" >
+                <Icon name="material-symbols:sell" mode="svg" style="color: white" size="2rem" /> Sold Products
+            </a>
+          </li>
+          <li class="nav-item">
             <a class="nav-link" href="#" @click="onCategoryClick('ALL')">
                 <Icon name="material-symbols:shopping-cart" mode="svg" style="color: white" size="2rem" /> All
             </a>

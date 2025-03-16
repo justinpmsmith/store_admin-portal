@@ -216,7 +216,9 @@ export default {
     }
   },
   methods: {
-    onImageChange(event) {
+    async onImageChange(event) {
+    await this.test();
+
       const file = event.target.files[0];
       if (file) {
         const reader = new FileReader();
@@ -243,6 +245,10 @@ export default {
     removeDocument() {
       this.document = null;
       this.documentName = "";
+    },
+    async test(){
+      let response = await Product.getSoldProducts();
+      console.log("sold items: ", response)
     },
     async addProduct() {
       let data = {
