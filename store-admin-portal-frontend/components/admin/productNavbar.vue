@@ -1,3 +1,30 @@
+
+Admin-portal-frontend /
+You are an experienced js and frontend developer. I am busy with a nuxt project that uses bootstrap. I have attached one of the components in my project. I would like to amend the layout a bit. at the moment all of the categories are just being displayed directly in the navbar. I would like to have a 'categories' dropdown under which the categories will show, similarly to the 'add' dropdown. the click functionality should still be the same. can you please update this component for me
+
+Edit
+I'll help you update your component to show categories in a dropdown menu similar to the "Add" dropdown. Here's how we'll modify your productNavbar.vue component:
+
+
+Updated productNavbar.vue
+Code 
+I've updated your productNavbar.vue component to include a Categories dropdown menu instead of displaying all categories directly in the navbar. Here are the key changes made:
+
+Removed the individual category list items from the main navbar
+Added a new "Categories" dropdown menu with the shopping cart icon
+Moved the "All" option as the first item inside the dropdown menu
+Added all categories from the props array as dropdown items
+Maintained the same click functionality using the onCategoryClick method
+The dropdown follows the same pattern as your existing "Add" dropdown, ensuring consistency in your UI. The click handlers will work the same way as before, just from within the dropdown menu instead.
+
+Is there anything specific you'd like me to adjust about this implementation?
+
+
+
+
+
+
+
 <template>
   <nav class="navbar navbar-expand-xl">
     <div class="container h-100">
@@ -67,15 +94,25 @@
                 <Icon name="material-symbols:sell" mode="svg" style="color: white" size="2rem" /> Sold Products
             </a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#" @click="onCategoryClick('ALL')">
-                <Icon name="material-symbols:shopping-cart" mode="svg" style="color: white" size="2rem" /> All
+          <li class="nav-item dropdown">
+            <a
+              class="nav-link dropdown-toggle"
+              href="#"
+              id="categoriesDropdown"
+              role="button"
+              data-toggle="dropdown"
+              aria-haspopup="true"
+              aria-expanded="false"
+            >
+              <Icon name="material-symbols:shopping-cart" mode="svg" style="color: white" size="2rem" />
+              <span> Categories <i class="fas fa-angle-down"></i> </span>
             </a>
-          </li>
-          <li class="nav-item" v-for="category in categories" :key="category">
-            <a class="nav-link" href="#" @click="onCategoryClick(category)">
-                <Icon name="material-symbols:shopping-cart" mode="svg" style="color: white" size="2rem" /> {{ category }}
-            </a>
+            <div class="dropdown-menu" aria-labelledby="categoriesDropdown">
+              <a class="dropdown-item" href="#" @click="onCategoryClick('ALL')">All</a>
+              <a class="dropdown-item" v-for="category in categories" :key="category" href="#" @click="onCategoryClick(category)">
+                {{ category }}
+              </a>
+            </div>
           </li>
         </ul>
       </div>
