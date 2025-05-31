@@ -14,6 +14,20 @@
         <div class="tm-bg-primary-dark tm-block tm-block-products">
           <!-- tm-block-products -->
           <h2 class="tm-block-title">{{ currentCategory }}</h2>
+          
+          <!-- Loading indicator -->
+          <div v-if="loadingProducts" class="text-center mb-3">
+            <div class="spinner-border text-light" role="status">
+              <span class="sr-only">Loading products...</span>
+            </div>
+            <p class="text-light mt-2">Loading products...</p>
+          </div>
+
+          <!-- No products message -->
+          <div v-if="products.length === 0 && !loadingProducts" class="text-center mb-3">
+            <p class="text-light">No products found for this category.</p>
+          </div>
+
           <div class="tm-product-table-container">
             <table class="table tm-table-small tm-product-table">
               <thead>
@@ -81,15 +95,6 @@
           <div class="tm-product-table-container">
             <table class="table table-hover tm-table-small tm-product-table">
               <tbody>
-                <tr>
-                  <td class="tm-product-name" @click="setCategory('ALL')">
-                    All
-                  </td>
-                  <td></td>
-                  <td></td>
-                  <!-- <td></td> -->
-                </tr>
-
                 <tr v-for="category in categoryNames">
                   <td class="tm-product-name" @click="setCategory(category)">
                     {{ category }}
@@ -149,7 +154,8 @@ export default {
       products: [],
       categoryNames: [],
       selectedProdCodes: [],
-      currentCategory: "ALL",
+      currentCategory: "",
+      loadingProducts: false,
     };
   },
   async mounted() {
@@ -158,30 +164,96 @@ export default {
   },
   methods: {
     async fetchProducts() {
-      // toast("Loading Products", { autoClose: 3000});
+      try {
+        this.loadingProducts = true;
+        this.products = []; // Clear existing products
+        this.selectedProdCodes = []; // Clear selected products when switching categories
 
-      // get products
-      let getProductsResp;
-      if (this.currentCategory.toUpperCase() == "ALL") {
-        getProductsResp = await Product.getAllProducts();
-      } else {
-        // TODO:get products for selected category
-        getProductsResp = await Product.getProductsByCategory(
-          this.currentCategory
-        );
-      }
+        // Get categories and sort them alphabetically
+        let getCategoryNameResp = await Product.getCategoryNames();
+        if (getCategoryNameResp != null) {
+          this.categoryNames = getCategoryNameResp.data.sort();
+          
+          // Set initial category based on last selected or first in list
+          if (!this.currentCategory && this.categoryNames.length > 0) {
+            const lastSelectedCategory = this.session.lastSelectedCategory;
+            
+            // Check if the last selected category still exists in the current category list
+            if (lastSelectedCategory && this.categoryNames.includes(lastSelectedCategory)) {
+              this.currentCategory = lastSelectedCategory;
+            } else {
+              // Fall back to first category if no valid last selected category
+              this.currentCategory = this.categoryNames[0];
+            }
+          }
+        }
 
-      // get categories
-      let getCategoryNameResp = await Product.getCategoryNames();
-
-      if (getProductsResp != null) {
-        this.products = getProductsResp.data;
-      }
-
-      if (getCategoryNameResp != null) {
-        this.categoryNames = getCategoryNameResp.data;
+        // Load products for the current category using lazy loading
+        if (this.currentCategory) {
+          await this.loadProductsByCategory(this.currentCategory);
+        }
+      } catch (error) {
+        console.error("Error fetching products:", error);
+        toast.error("Error loading products", {
+          autoClose: 3000,
+          hideProgressBar: true,
+        });
+      } finally {
+        this.loadingProducts = false;
       }
     },
+
+    async loadProductsByCategory(category) {
+      try {
+        // Step 1: Get all product codes for the category
+        const prodCodesResponse = await Product.getProdCodesByCategory(category);
+
+        if (
+          !prodCodesResponse ||
+          !prodCodesResponse.data ||
+          !prodCodesResponse.data.length
+        ) {
+          console.log("No product codes found for this category.");
+          return;
+        }
+
+        const prodCodes = prodCodesResponse.data;
+        console.log(
+          `Found ${prodCodes.length} products in category. Loading them individually...`
+        );
+
+        // Step 2: For each product code, fetch the product and add it to the list
+        for (let i = 0; i < prodCodes.length; i++) {
+          const prodCode = prodCodes[i];
+          try {
+            const productResponse = await Product.getProductByProdCode(prodCode);
+
+            if (productResponse && productResponse.data) {
+              const product = productResponse.data;
+              
+              // Add to products array (this will update the UI as each product comes in)
+              this.products.push(product);
+
+              console.log(
+                `Loaded product ${i + 1}/${prodCodes.length}: ${prodCode}`
+              );
+            }
+          } catch (productError) {
+            console.error(`Error loading product ${prodCode}:`, productError);
+            // Continue with next product even if this one fails
+          }
+        }
+
+        console.log(`Completed loading ${this.products.length} products.`);
+      } catch (error) {
+        console.error("Error loading product codes:", error);
+        toast.error("Error loading product codes", {
+          autoClose: 3000,
+          hideProgressBar: true,
+        });
+      }
+    },
+
     toggleProductSelection(prodCode, event) {
       if (event.target.checked) {
         this.selectedProdCodes.push(prodCode);
@@ -194,7 +266,7 @@ export default {
     },
 
     async deleteSelectedProducts() {
-      // TODO:looading spinner
+      // TODO:loading spinner
       if (this.selectedProdCodes.length == 0) {
         return;
       }
@@ -202,7 +274,7 @@ export default {
       let prodCodeToDelete;
       while (this.selectedProdCodes.length > 0) {
         prodCodeToDelete = this.selectedProdCodes.pop();
-        // delet product
+        // delete product
         var deleteResp = await Product.deleteProductByProdCode(
           prodCodeToDelete
         );
@@ -214,7 +286,7 @@ export default {
           break;
         }
         if (!deleteResp.meta.success) {
-          toast.warning("There was an issue deleting these productsdocker", {
+          toast.warning("There was an issue deleting these products", {
             autoClose: 3000,
             hideProgressBar: true,
           });
@@ -231,6 +303,10 @@ export default {
     async setCategory(category) {
       console.log("selected category: ", category);
       this.currentCategory = category;
+      
+      // Save the selected category to session store
+      this.session.setLastSelectedCategory(category);
+      
       await this.fetchProducts();
     },
 

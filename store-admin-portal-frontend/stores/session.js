@@ -2,19 +2,24 @@ import { defineStore } from 'pinia';
 
 const useSessionStore = defineStore('session', {
   state: () => ({
-    apiToken: ''
+    apiToken: '',
+    lastSelectedCategory: ''
   }),
   getters: {
-    getApiToken: (state) => state.apiToken
+    getApiToken: (state) => state.apiToken,
+    getLastSelectedCategory: (state) => state.lastSelectedCategory
   },
   actions: {
     setApiToken(token) {
       this.apiToken = token;
+    },
+    setLastSelectedCategory(category) {
+      this.lastSelectedCategory = category;
     }
   },
   persist: {
     // storage: sessionStorage ,  // default is localStorage
-    paths: ['apiToken']    // specify which state properties to persist
+    paths: ['apiToken', 'lastSelectedCategory']    // specify which state properties to persist
   }
 });
 

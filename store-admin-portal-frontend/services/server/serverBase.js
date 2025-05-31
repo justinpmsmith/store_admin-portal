@@ -51,8 +51,8 @@ class ServerBase {
 
   static async getRequest(endpoint, params = null) {
     const isAdminEndpoint = endpoint.includes("admin");
-
-    if (isAdminEndpoint && !(await this.amAuthenticated())) {
+    // if (isAdminEndpoint && !(await this.amAuthenticated())) {
+    if (!(await this.amAuthenticated())) {
       await navigateTo("/admin");
       return null;
     }
@@ -89,7 +89,7 @@ class ServerBase {
   static async postRequest(endpoint, data) {
     const isAdminEndpoint = endpoint.includes("admin");
 
-    if (isAdminEndpoint && !(await this.amAuthenticated())) {
+    if (!(await this.amAuthenticated())) {
       await navigateTo("/admin");
 
       return null;
@@ -127,7 +127,7 @@ class ServerBase {
   static async deleteRequest(endpoint, params = null) {
     const isAdminEndpoint = endpoint.includes("admin");
 
-    if (isAdminEndpoint && !(await this.amAuthenticated())) {
+    if (!(await this.amAuthenticated())) {
       await navigateTo("/admin");
       return null;
     }

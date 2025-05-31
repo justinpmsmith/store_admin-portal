@@ -108,7 +108,7 @@ Is there anything specific you'd like me to adjust about this implementation?
               <span> Categories <i class="fas fa-angle-down"></i> </span>
             </a>
             <div class="dropdown-menu" aria-labelledby="categoriesDropdown">
-              <a class="dropdown-item" href="#" @click="onCategoryClick('ALL')">All</a>
+              <!-- <a class="dropdown-item" href="#" @click="onCategoryClick('ALL')">All</a> -->
               <a class="dropdown-item" v-for="category in categories" :key="category" href="#" @click="onCategoryClick(category)">
                 {{ category }}
               </a>
