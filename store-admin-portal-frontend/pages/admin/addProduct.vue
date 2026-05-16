@@ -181,7 +181,7 @@ export default {
       session: null,
       productName: "",
       categoryNames: [],
-      description: "sss",
+      description: "",
       prodCode: "",
       quantity: 1,
       images: [],

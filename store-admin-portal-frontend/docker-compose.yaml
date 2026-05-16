@@ -8,8 +8,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: 'sportvest-admin-portal:0.0.1'
-    container_name: sportvest-admin-portal:0.0.1
+    image: 'sportvest-admin-portal:0.0.5'
+    # container_name: sportvest-admin-portal:0.0.2
     networks:
       - codesmith-network
     ports:

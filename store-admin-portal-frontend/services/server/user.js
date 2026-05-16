@@ -1,10 +1,11 @@
 import ServerBase from "./serverBase";
+import config from "~/config";
 
 class User extends ServerBase {
     static async authUser(data) {
         // data = {name, passwordHash}
     
-        const endpoint = "/client/authenticateUser";
+        const endpoint = config.auththenticateEndpoint;
         const response = await this.postRequest(endpoint, data);
 
         console.log("response: ", response);

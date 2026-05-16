@@ -22,16 +22,17 @@ class ServerBase {
   static async amAuthenticated() {
     const router = useRouter();
     const token = this.getAccessToken();
-    // console.log("amAuthenticated token: " + token);
-
+    console.log("checking if authenticated");
+  
     // Check if token exists and is valid length
     if (!token || token.length < 10) {
-      // await navigateTo('/admin');
+      console.log("token does not exist");
       return false;
     }
-
+  
     try {
       const url = (await this.getServerPath()) + "/admin/amAuth";
+      console.log("token: " + token);
       const config = {
         method: "get",
         maxBodyLength: Infinity,
@@ -39,16 +40,30 @@ class ServerBase {
         headers: {
           Authorization: `Bearer ${token}`,
         },
+        // This prevents axios from throwing an error for any status code
+        validateStatus: function (status) {
+          return true; // Always resolve the promise regardless of status
+        }
       };
-
+  
       const response = await axios.request(config);
-      return response.status === 200;
+      console.log("amAuthenticated response status: " + response.status);
+  
+      if (response.status === 200) {
+        return true;
+      } else if (response.status === 401) {
+        console.log("Authentication failed - token invalid or expired");
+        return false;
+      } else {
+        console.log("Unexpected response status:", response.status);
+        return false;
+      }
     } catch (error) {
-      console.error("Authentication check failed:", error);
+      // This will only catch network errors or other non-HTTP errors now
+      console.error("Network or other error:", error);
+      return false;
     }
-    return false;
   }
-
   static async getRequest(endpoint, params = null) {
     const isAdminEndpoint = endpoint.includes("admin");
     // if (isAdminEndpoint && !(await this.amAuthenticated())) {
@@ -88,12 +103,13 @@ class ServerBase {
 
   static async postRequest(endpoint, data) {
     const isAdminEndpoint = endpoint.includes("admin");
+    console.log("endpoint: " + endpoint);
 
-    if (!(await this.amAuthenticated())) {
-      await navigateTo("/admin");
+    // if (!endpoint.includes(config.auththenticateEndpoint) && !(await this.amAuthenticated())) {
+    //   await navigateTo("/admin");
 
-      return null;
-    }
+    //   return null;
+    // }
     try {
       const url = (await this.getServerPath()) + endpoint;
       console.log("post endpoint: " + url);
